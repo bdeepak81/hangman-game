@@ -1,4 +1,4 @@
-var wordArray = ["homework", "terrific", "discussion", "national", "basketball", "turnover", "acrobat", "joker", "playset", "vocabulary",   "language", "javascript", "disruption"];
+var wordArray = ["homework", "terrific", "discussion", "national", "basketball", "turnover", "acrobat", "joker", "playset", "vocabulary", "language", "javascript", "disruption"];
 //var wordArray = ["homework", "terrific", "discussion", "national"];
 var currentRoundWord = "";
 var wins = 0;
@@ -61,39 +61,30 @@ function displayWordLetters(arg1) {
 			displayWordArray.push(value);
 		}
 	});
-	var newPTag = $("<p>");
-	newPTag.text(displayWordArray.join(" "));
-	$(".word-dash").empty();
-	$(".word-dash").append(newPTag);
+	setMessageToDisplay(".word-dash",displayWordArray.join(" "));
 	if (!roundFailed && displayWordArray.indexOf("_") === -1) {
 		wins++;
-		var newPTag = $("<p>");
-		newPTag.text("Great Job!!! You have completed this round successfully. Press Next to continue.");
-		$(".messageClass").empty();
-		$(".messageClass").append(newPTag);
+		setMessageToDisplay(".messageClass","Great Job!!! You have completed this round successfully. Press Next to continue.");
 		displayPlayedWords();
 		displayStatistics();
 	}
 }
 
 function displayPlayedWords(){
-	var newPTag = $("<p>");
-	newPTag.text(playedWordsArray.join(", "));
-	$(".played-words").empty();
-	$(".played-words").append(newPTag);
+	setMessageToDisplay(".played-words",playedWordsArray.join(", "));
 }
 
 function displayStatistics(){
-	var newWinsTag = $("<p>");
-	newWinsTag.text(wins);
-	$(".noOfWins").empty();
-	$(".noOfWins").append(newWinsTag);
+	setMessageToDisplay(".noOfWins", wins);
+	setMessageToDisplay(".noOfLosses", losses);	
 
-	var newLossesTag = $("<p>");
-	newLossesTag.text(losses);
-	$(".noOfLosses").empty();
-	$(".noOfLosses").append(newLossesTag);	
+}
 
+function setMessageToDisplay(className, message){
+	var newPTag = $("<p>");
+	newPTag.text(message);
+	$(className).empty();
+	$(className).append(newPTag);
 }
 
 $(document).keypress(function(event) {
@@ -110,37 +101,23 @@ $(document).keypress(function(event) {
 					attempts--;
 				}
 				displayWordLetters(attemptedLetters);
-				var newPTag = $("<p>");
-				newPTag.text(attemptedLetters.join(","));
-				$(".letterMessage").empty();
-				$(".letterMessage").append($("<p>").text("Your attempted letters:"));
-				$(".attempted-letters").empty();
-				$(".attempted-letters").append(newPTag);
-				$(".noOfAttempts").empty();
-				$(".noOfAttempts").append(attempts);
+				setMessageToDisplay(".letterMessage","Your attempted letters:");
+				setMessageToDisplay(".attempted-letters",attemptedLetters.join(","));
+				setMessageToDisplay(".noOfAttempts",attempts);
 			} else {
-				var newPTag = $("<p>");
-				newPTag.text("You have already guessed this letter");
-				$(".messageClass").empty();
-				$(".messageClass").append(newPTag);
+				setMessageToDisplay(".messageClass","You have already guessed this letter");
 			}	
 		
 		} else {
 			roundFailed = true;
-			var newPTag = $("<p>");
-			newPTag.text("Sorry!!! You dont have any more attempts. The word is: ");
-			$(".messageClass").empty();
-			$(".messageClass").append(newPTag);
+			setMessageToDisplay(".messageClass","Sorry!!! You dont have any more attempts. The word is: ");
 			losses++;
 			displayWordLetters(currentRoundWord);
 			displayPlayedWords();
 			displayStatistics();
 		}
 	} else {
-			var newPTag = $("<p>");
-			newPTag.text("You have pressed a invalid key");
-			$(".messageClass").empty();
-			$(".messageClass").append(newPTag);
+			setMessageToDisplay(".messageClass","You have pressed a invalid key");
 	}
 });
 $(document).ready(function() {
