@@ -94,7 +94,7 @@ function displayStatistics(){
 $(document).keypress(function(event) {
 
 	if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
-		if (attempts !== 0){
+		if (attempts != 0){
 		
 			userAttemptedLetter = String.fromCharCode(event.keyCode).toLowerCase();
 			
@@ -127,6 +127,7 @@ $(document).keypress(function(event) {
 			$(".messageClass").empty();
 			$(".messageClass").append(newPTag);
 			losses++;
+			displayWordLetters(currentRoundWord);
 			displayPlayedWords();
 			displayStatistics();
 		}
