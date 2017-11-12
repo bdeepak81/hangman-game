@@ -1,4 +1,5 @@
 var wordArray = ["homework", "terrific", "discussion", "national", "basketball", "turnover", "acrobat", "joker", "playset", "vocabulary",   "language", "javascript", "disruption"];
+//var wordArray = ["homework", "terrific", "discussion", "national"];
 var currentRoundWord = "";
 var wins = 0;
 var losses = 0;
@@ -66,6 +67,10 @@ function displayWordLetters(arg1) {
 	$(".word-dash").append(newPTag);
 	if (!roundFailed && displayWordArray.indexOf("_") === -1) {
 		wins++;
+		var newPTag = $("<p>");
+		newPTag.text("Great Job!!! You have completed this round successfully. Press Next to continue.");
+		$(".messageClass").empty();
+		$(".messageClass").append(newPTag);
 		displayPlayedWords();
 		displayStatistics();
 	}
@@ -123,7 +128,7 @@ $(document).keypress(function(event) {
 		} else {
 			roundFailed = true;
 			var newPTag = $("<p>");
-			newPTag.text("Sorry!!! You dont have any more attempts. The word is: " + currentRoundWord);
+			newPTag.text("Sorry!!! You dont have any more attempts. The word is: ");
 			$(".messageClass").empty();
 			$(".messageClass").append(newPTag);
 			losses++;
@@ -170,25 +175,20 @@ $(document).ready(function() {
       $(".next-button").on("click", function() {
       		displayPlayedWords();
       		displayStatistics();
+      		$(".letterMessage, .noOfAttempts, .attempted-letters, .played-words, .messageClass").empty();
       		if (!(playedWordsArray.length == wordArray.length)){
 	      		if (displayWordArray.indexOf("_") === -1){
-			    		$(".letterMessage").empty();
-			    		$(".attempted-letters").empty();
 			    		initializeRound();
 			        	getNextWordArray();
 			        	displayWordLetters(attemptedLetters);
-			        	$(".noOfAttempts").empty();
 			            $(".noOfAttempts").append(attempts);
 			    } else {
 			    	var userChoice = confirm("You haven't finished this round yet. Are you sure?");
 			    	if (userChoice){
 			    		losses++;
-			    		$(".letterMessage").empty();
-			    		$(".attempted-letters").empty();
 			    		initializeRound();
 			        	getNextWordArray();
 			        	displayWordLetters(attemptedLetters);
-			        	$(".noOfAttempts").empty();
 			            $(".noOfAttempts").append(attempts);
 			    	}
 			    }
@@ -200,11 +200,9 @@ $(document).ready(function() {
 	        		$(".stop-button").prop('disabled', false);
 	        		initialize();
 	        		getNextWordArray();
-	        		$(".letterMessage").empty();
-			    	$(".attempted-letters").empty();
-			    	$(".noOfAttempts").empty();
 			        $(".noOfAttempts").append(attempts);
 			        displayWordLetters(attemptedLetters);
+			        displayStatistics();
 				} else {
 					$(".next-button").prop('disabled', true);
 				}
@@ -212,7 +210,7 @@ $(document).ready(function() {
       });
       $(".stop-button").on("click", function() {
 	        $(".start-button").prop('disabled', false);
-	        $(".next-button").prop('disabled', false);
+	        $(".next-button").prop('disabled', true);
 	        $(".stop-button").prop('disabled', true);
 	        initialize();
 	        $(".noOfAttempts").empty();
