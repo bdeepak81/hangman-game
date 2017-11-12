@@ -171,11 +171,15 @@ $(document).ready(function() {
 		        getNextWordArray();
 		        displayWordLetters(attemptedLetters);
 		    } else {
-		    	if (confirm("You haven't finished this round yet. Are you sure?")){
+		    	var userChoice = confirm("You haven't finished this round yet. Are you sure?");
+		    	if (userChoice){
 		    		losses++;
+		    		$(".attempted-letters").empty();
 		    		initializeRound();
 		        	getNextWordArray();
 		        	displayWordLetters(attemptedLetters);
+		        	$(".noOfAttempts").empty();
+		            $(".noOfAttempts").append(attempts);
 		    	}
 		    }
       });
