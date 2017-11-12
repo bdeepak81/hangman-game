@@ -72,7 +72,9 @@ function displayPlayedWords(){
 	$(".played-words").append(newPTag);
 }
 
+function displayStatistics(){
 
+}
 
 
 // $(".start-button").on("click", function() {
@@ -124,8 +126,6 @@ function displayPlayedWords(){
 				$(".messageClass").append(newPTag);
 				losses++;
 				displayPlayedWords(currentRoundWord);
-
-			alert("i am in outer else");
 			}
 		} else {
 				var newPTag = $("<p>");
@@ -133,8 +133,6 @@ function displayPlayedWords(){
 				$(".messageClass").empty();
 				$(".messageClass").append(newPTag);
 		}
-		alert("i am at the end of keypress");
-
 	});
 $(document).ready(function() {
 
@@ -167,13 +165,18 @@ $(document).ready(function() {
 
       $(".next-button").on("click", function() {
       		if (displayWordArray.indexOf("_") === -1){
-		        initializeRound();
-		        getNextWordArray();
-		        displayWordLetters(attemptedLetters);
+		    		$(".letterMessage").empty();
+		    		$(".attempted-letters").empty();
+		    		initializeRound();
+		        	getNextWordArray();
+		        	displayWordLetters(attemptedLetters);
+		        	$(".noOfAttempts").empty();
+		            $(".noOfAttempts").append(attempts);
 		    } else {
 		    	var userChoice = confirm("You haven't finished this round yet. Are you sure?");
 		    	if (userChoice){
 		    		losses++;
+		    		$(".letterMessage").empty();
 		    		$(".attempted-letters").empty();
 		    		initializeRound();
 		        	getNextWordArray();
