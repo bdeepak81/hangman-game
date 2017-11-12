@@ -92,6 +92,7 @@ $(document).keypress(function(event) {
 	if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
 		if (attempts != 0){
 		
+			roundFailed = false;
 			userAttemptedLetter = String.fromCharCode(event.keyCode).toLowerCase();
 			
 			if (attemptedLetters.indexOf(userAttemptedLetter) === -1) {
@@ -152,7 +153,7 @@ $(document).ready(function() {
       $(".next-button").on("click", function() {
       		displayPlayedWords();
       		displayStatistics();
-      		$(".letterMessage, .noOfAttempts, .attempted-letters, .played-words, .messageClass").empty();
+      		$(".letterMessage, .noOfAttempts, .attempted-letters, .messageClass").empty();
       		if (!(playedWordsArray.length == wordArray.length)){
 	      		if (displayWordArray.indexOf("_") === -1){
 			    		initializeRound();
