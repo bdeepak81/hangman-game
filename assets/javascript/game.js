@@ -98,7 +98,6 @@ function doFailureAnimation(){
 function doSuccessAnimation(){
 	var audioClip = new Audio("assets/music/success.mp3" + '#t=' + 0.00 + ',' + 1.00);
 	$(".hangman").attr("src","assets/images/hangman_success.png");
-//	audioClip.setAttribute("src","assets/music/success.mp3");
 	audioClip.play();
 }
 
