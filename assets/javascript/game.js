@@ -8,6 +8,7 @@ var attemptedLetters =[];
 var userAttemptedLetter = "";
 var currentWordArray = [];
 var displayWordArray = [];
+var roundFailed = false;
 
 function initialize(){
 	currentRoundWord = "";
@@ -63,6 +64,11 @@ function displayWordLetters(arg1) {
 	newPTag.text(displayWordArray.join(" "));
 	$(".word-dash").empty();
 	$(".word-dash").append(newPTag);
+	if (!roundFailed && displayWordArray.indexOf("_") === -1) {
+		wins++;
+		displayPlayedWords();
+		displayStatistics();
+	}
 }
 
 function displayPlayedWords(){
@@ -73,67 +79,64 @@ function displayPlayedWords(){
 }
 
 function displayStatistics(){
+	var newWinsTag = $("<p>");
+	newWinsTag.text(wins);
+	$(".noOfWins").empty();
+	$(".noOfWins").append(newWinsTag);
+
+	var newLossesTag = $("<p>");
+	newLossesTag.text(losses);
+	$(".noOfLosses").empty();
+	$(".noOfLosses").append(newLossesTag);	
 
 }
 
+$(document).keypress(function(event) {
 
-// $(".start-button").on("click", function() {
-// 		$(".start-button").prop('disabled', true);
-//         //$(".captain-planet").animate({ height: "300px" });
-// });
-
-// $(".start-button").on("click", function() {
-//     $(".start-button").prop('disabled', true);
-//     $("end-button").prop('disabled', false);
-//     initialize();
-//     getNextWordArray();
-//     displayWordLetters();
-// });
-
-	$(document).keypress(function(event) {
-
-		if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
-			if (attempts !== 0){
+	if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
+		if (attempts !== 0){
+		
+			userAttemptedLetter = String.fromCharCode(event.keyCode).toLowerCase();
 			
-				userAttemptedLetter = String.fromCharCode(event.keyCode).toLowerCase();
-				
-				if (attemptedLetters.indexOf(userAttemptedLetter) === -1) {
-					$(".messageClass").empty();
-					attemptedLetters.push(userAttemptedLetter);
-					if (currentWordArray.indexOf(userAttemptedLetter) == -1){
-						attempts--;
-					}
-					displayWordLetters(attemptedLetters);
-					var newPTag = $("<p>");
-					newPTag.text(attemptedLetters.join(","));
-					$(".letterMessage").empty();
-					$(".letterMessage").append($("<p>").text("Your attempted letters:"));
-					$(".attempted-letters").empty();
-					$(".attempted-letters").append(newPTag);
-					$(".noOfAttempts").empty();
-					$(".noOfAttempts").append(attempts);
-				} else {
-					var newPTag = $("<p>");
-					newPTag.text("You have already guessed this letter");
-					$(".messageClass").empty();
-					$(".messageClass").append(newPTag);
-				}	
-			
+			if (attemptedLetters.indexOf(userAttemptedLetter) === -1) {
+				$(".messageClass").empty();
+				attemptedLetters.push(userAttemptedLetter);
+				if (currentWordArray.indexOf(userAttemptedLetter) == -1){
+					attempts--;
+				}
+				displayWordLetters(attemptedLetters);
+				var newPTag = $("<p>");
+				newPTag.text(attemptedLetters.join(","));
+				$(".letterMessage").empty();
+				$(".letterMessage").append($("<p>").text("Your attempted letters:"));
+				$(".attempted-letters").empty();
+				$(".attempted-letters").append(newPTag);
+				$(".noOfAttempts").empty();
+				$(".noOfAttempts").append(attempts);
 			} else {
 				var newPTag = $("<p>");
-				newPTag.text("Sorry!!! You dont have any more attempts. The word is: " + currentRoundWord);
+				newPTag.text("You have already guessed this letter");
 				$(".messageClass").empty();
 				$(".messageClass").append(newPTag);
-				losses++;
-				displayPlayedWords(currentRoundWord);
-			}
+			}	
+		
 		} else {
-				var newPTag = $("<p>");
-				newPTag.text("You have pressed a invalid key");
-				$(".messageClass").empty();
-				$(".messageClass").append(newPTag);
+			roundFailed = true;
+			var newPTag = $("<p>");
+			newPTag.text("Sorry!!! You dont have any more attempts. The word is: " + currentRoundWord);
+			$(".messageClass").empty();
+			$(".messageClass").append(newPTag);
+			losses++;
+			displayPlayedWords();
+			displayStatistics();
 		}
-	});
+	} else {
+			var newPTag = $("<p>");
+			newPTag.text("You have pressed a invalid key");
+			$(".messageClass").empty();
+			$(".messageClass").append(newPTag);
+	}
+});
 $(document).ready(function() {
 
       // Gets Link for Theme Song
@@ -154,109 +157,68 @@ $(document).ready(function() {
 	        $(".start-button").prop('disabled', true);
 	        $(".next-button").prop('disabled', false);
 	        $(".stop-button").prop('disabled', false);
+	        $(".played-words").empty();
 	        initialize();
 	        getNextWordArray();
 	        displayWordLetters(attemptedLetters);
-	        // $(".attemptsMessage").empty();
-	        // $(".attemptsMessage").append("Available Attempts: ");
+	        displayStatistics();
 	        $(".noOfAttempts").empty();
 		    $(".noOfAttempts").append(attempts);
+		    alert("in start-played words array" + playedWordsArray);
       });
 
       $(".next-button").on("click", function() {
-      		if (displayWordArray.indexOf("_") === -1){
-		    		$(".letterMessage").empty();
-		    		$(".attempted-letters").empty();
-		    		initializeRound();
-		        	getNextWordArray();
-		        	displayWordLetters(attemptedLetters);
-		        	$(".noOfAttempts").empty();
-		            $(".noOfAttempts").append(attempts);
-		    } else {
-		    	var userChoice = confirm("You haven't finished this round yet. Are you sure?");
-		    	if (userChoice){
-		    		losses++;
-		    		$(".letterMessage").empty();
-		    		$(".attempted-letters").empty();
-		    		initializeRound();
-		        	getNextWordArray();
-		        	displayWordLetters(attemptedLetters);
-		        	$(".noOfAttempts").empty();
-		            $(".noOfAttempts").append(attempts);
-		    	}
-		    }
+      		displayPlayedWords();
+      		displayStatistics();
+      		alert("in next-played words array" + playedWordsArray);
+      		alert("in next-words array" + wordArray);
+
+      		if (!(playedWordsArray.length == wordArray.length)){
+	      		if (displayWordArray.indexOf("_") === -1){
+			    		$(".letterMessage").empty();
+			    		$(".attempted-letters").empty();
+			    		initializeRound();
+			        	getNextWordArray();
+			        	displayWordLetters(attemptedLetters);
+			        	$(".noOfAttempts").empty();
+			            $(".noOfAttempts").append(attempts);
+			    } else {
+			    	var userChoice = confirm("You haven't finished this round yet. Are you sure?");
+			    	if (userChoice){
+			    		losses++;
+			    		$(".letterMessage").empty();
+			    		$(".attempted-letters").empty();
+			    		initializeRound();
+			        	getNextWordArray();
+			        	displayWordLetters(attemptedLetters);
+			        	$(".noOfAttempts").empty();
+			            $(".noOfAttempts").append(attempts);
+			    	}
+			    }
+			} else {
+				var userChoice = confirm("You have attempted all words. Do you want to play again?");
+				if (userChoice){
+					$(".start-button").prop('disabled', true);
+	        		$(".next-button").prop('disabled', false);
+	        		$(".stop-button").prop('disabled', false);
+	        		initialize();
+	        		getNextWordArray();
+	        		$(".letterMessage").empty();
+			    	$(".attempted-letters").empty();
+			    	$(".noOfAttempts").empty();
+			        $(".noOfAttempts").append(attempts);
+			        displayWordLetters(attemptedLetters);
+				} else {
+					$(".next-button").prop('disabled', true);
+				}
+			}
       });
-      // $(".grow-button").on("click", function() {
-      //   $(".captain-planet").animate({ height: "500px" });
-      // });
-
-      // $(".shrink-button").on("click", function() {
-      //   $(".captain-planet").animate({ height: "100px" });
-      // });
-
-      // // Visibility Buttons
-      // $(".vis-button").on("click", function() {
-      //   $(".captain-planet").animate({ opacity: "1" });
-      // });
-
-      // $(".invis-button").on("click", function() {
-      //   $(".captain-planet").animate({ opacity: "0.05" });
-      // });
-      
-      // $(".fire-button").on("click", function() {
-      //   $(".fire").animate({ opacity: "1" });
-      // });
-      // // Move Buttons
-      // $(".up-button").on("click", function() {
-      //   $(".captain-planet").animate({ top: "-=200px" }, "normal");
-      // });
-
-      // $(".down-button").on("click", function() {
-      //   $(".captain-planet").animate({ top: "+=200px" }, "normal");
-      // });
-
-      // $(".left-button").on("click", function() {
-      //   $(".captain-planet").animate({ left: "-=200px" }, "normal");
-      // });
-
-      // $(".right-button").on("click", function() {
-      //   $(".captain-planet").animate({ left: "+=200px" }, "normal");
-      // });
-
-      // $(".back-button").on("click", function() {
-      //   $(".captain-planet").animate({ top: "50px", left: "80px" }, "fast");
-      // });
-
-      // Move Buttons (Keyboard Down)
-      $(document).keyup(function(e) {
-        switch (e.which) {
-          case 40:
-            $(".captain-planet").animate({ top: "+=200px" }, "normal");
-        }
-      });
-
-      // Move Buttons (Keyboard Right)
-      $(document).keyup(function(e) {
-        switch (e.which) {
-          case 39:
-            $(".captain-planet").animate({ left: "+=200px" }, "normal");
-        }
-      });
-
-      // Move Buttons (Keyboard Up)
-      $(document).keyup(function(e) {
-        switch (e.which) {
-          case 38:
-            $(".captain-planet").animate({ top: "-=200px" }, "normal");
-        }
-      });
-
-      // Move Buttons (Keyboard Left)
-      $(document).keyup(function(e) {
-        switch (e.which) {
-          case 37:
-            $(".captain-planet").animate({ left: "-=200px" }, "normal");
-        }
+      $(".stop-button").on("click", function() {
+	        $(".start-button").prop('disabled', false);
+	        $(".next-button").prop('disabled', false);
+	        $(".stop-button").prop('disabled', true);
+	        initialize();
+	        $(".noOfAttempts").empty();
       });
 });
 
