@@ -164,15 +164,11 @@ $(document).ready(function() {
 	        displayStatistics();
 	        $(".noOfAttempts").empty();
 		    $(".noOfAttempts").append(attempts);
-		    alert("in start-played words array" + playedWordsArray);
       });
 
       $(".next-button").on("click", function() {
       		displayPlayedWords();
       		displayStatistics();
-      		alert("in next-played words array" + playedWordsArray);
-      		alert("in next-words array" + wordArray);
-
       		if (!(playedWordsArray.length == wordArray.length)){
 	      		if (displayWordArray.indexOf("_") === -1){
 			    		$(".letterMessage").empty();
