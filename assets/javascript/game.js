@@ -10,6 +10,7 @@ var userAttemptedLetter = "";
 var currentWordArray = [];
 var displayWordArray = [];
 var roundFailed = false;
+var startFlag = false;
 
 function initialize(){
 	currentRoundWord = "";
@@ -56,7 +57,7 @@ function displayWordLetters(arg1) {
 	displayWordArray = [];
 	$(currentWordArray).each(function(index,value){
 		if (arg1.indexOf(value) === -1 ){
-			displayWordArray.push("_"); 
+			displayWordArray.push("_");
 		} else {
 			displayWordArray.push(value);
 		}
@@ -67,6 +68,7 @@ function displayWordLetters(arg1) {
 		setMessageToDisplay(".messageClass","Great Job!!! You have completed this round successfully. Press Next to continue.");
 		displayPlayedWords();
 		displayStatistics();
+		$(".hangman").attr("src","assets/images/hangman.jpg");
 	}
 }
 
@@ -87,9 +89,24 @@ function setMessageToDisplay(className, message){
 	$(className).append(newPTag);
 }
 
+function doFailureAnimation(){
+	var audioClip = new Audio("assets/music/failure.mp3" + '#t=' + 0.00 + ',' + 1.00);
+	$(".hangman").attr("src","assets/images/hangman_incorrect.png");
+	audioClip.play();
+}
+
+function doSuccessAnimation(){
+	var audioClip = new Audio("assets/music/success.mp3" + '#t=' + 0.00 + ',' + 1.00);
+	$(".hangman").attr("src","assets/images/hangman_success.png");
+//	audioClip.setAttribute("src","assets/music/success.mp3");
+	audioClip.play();
+}
+
 $(document).keypress(function(event) {
 
+	startFlag = false;
 	if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
+		
 		if (attempts != 0){
 		
 			roundFailed = false;
@@ -100,6 +117,11 @@ $(document).keypress(function(event) {
 				attemptedLetters.push(userAttemptedLetter);
 				if (currentWordArray.indexOf(userAttemptedLetter) == -1){
 					attempts--;
+					if (!startFlag){
+						doFailureAnimation();
+					} 
+				} else {
+					doSuccessAnimation();
 				}
 				displayWordLetters(attemptedLetters);
 				setMessageToDisplay(".letterMessage","Your attempted letters:");
@@ -123,18 +145,6 @@ $(document).keypress(function(event) {
 });
 $(document).ready(function() {
 
-      // Gets Link for Theme Song
-      var successAudio = document.createElement("audio");
-      //successAudio.setAttribute("src", "Assets/captainplanet24.mp3");
-      // Theme Button
-      // $(".theme-button").on("click", function() {
-      //   audioElement.play();
-      // });
-
-      // $(".pause-button").on("click", function() {
-      //   audioElement.pause();
-      // });
-
       $(".noOfAttempts").empty();
 	  $(".noOfAttempts").append(attempts);
       $(".start-button").on("click", function() {
@@ -142,6 +152,7 @@ $(document).ready(function() {
 	        $(".next-button").prop('disabled', false);
 	        $(".stop-button").prop('disabled', false);
 	        $(".played-words").empty();
+	        startFlag = true;
 	        initialize();
 	        getNextWordArray();
 	        displayWordLetters(attemptedLetters);
