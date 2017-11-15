@@ -102,7 +102,6 @@ function doSuccessAnimation(){
 }
 
 $(document).keypress(function(event) {
-
 	startFlag = false;
 	if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)){
 		
@@ -150,13 +149,12 @@ $(document).ready(function() {
 	        $(".start-button").prop('disabled', true);
 	        $(".next-button").prop('disabled', false);
 	        $(".stop-button").prop('disabled', false);
-	        $(".played-words").empty();
 	        startFlag = true;
 	        initialize();
 	        getNextWordArray();
 	        displayWordLetters(attemptedLetters);
 	        displayStatistics();
-	        $(".noOfAttempts").empty();
+	        $(".letterMessage, .noOfAttempts, .attempted-letters, .messageClass, .played-words").empty();
 		    $(".noOfAttempts").append(attempts);
       });
 
@@ -177,12 +175,14 @@ $(document).ready(function() {
 			    		initializeRound();
 			        	getNextWordArray();
 			        	displayWordLetters(attemptedLetters);
+			        	displayStatistics();
 			            $(".noOfAttempts").append(attempts);
 			    	}
 			    }
 			} else {
 				var userChoice = confirm("You have attempted all words. Do you want to play again?");
 				if (userChoice){
+					$(".letterMessage, .noOfAttempts, .attempted-letters, .messageClass, .played-words").empty();
 					$(".start-button").prop('disabled', true);
 	        		$(".next-button").prop('disabled', false);
 	        		$(".stop-button").prop('disabled', false);
